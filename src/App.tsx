@@ -14,6 +14,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {openDbAsync, executeSqlAsync, enableDbPromise} from './utils/dbManager';
 import React, {useEffect} from 'react';
 import {
+  NativeEventEmitter,
   SafeAreaView,
   StatusBar,
   StyleSheet,
@@ -21,43 +22,8 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
-
-function ScreenB() {
-  return (
-    <View>
-      <Text>Prova b</Text>
-    </View>
-  );
-}
-
-function ScreenA() {
-  return (
-    <View>
-      <Text>Prova a</Text>
-    </View>
-  );
-}
-
-function Home() {
-  const Drawer = createDrawerNavigator();
-  return (
-    <View style={{flex: 1}}>
-      <StatusBar animated={true} />
-      <Drawer.Navigator>
-        <Drawer.Screen
-          name="DataManagement"
-          options={{title: 'Dati'}}
-          component={ScreenA}
-        />
-        <Drawer.Screen
-          name="Stats"
-          options={{title: 'Statistiche'}}
-          component={ScreenB}
-        />
-      </Drawer.Navigator>
-    </View>
-  );
-}
+import Home from './screens/Home';
+import InsertMonthData from './screens/InsertMonthData';
 
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -67,9 +33,11 @@ const App = () => {
     var createTable =
       'CREATE TABLE IF NOT EXISTS [MonthsData]( [Year] SMALLINT, [Month] SMALLINT, [Day] SMALLINT, [Room] SMALLINT, [Value] SMALLINT, PRIMARY KEY([Year] ASC, [Month] ASC, [Room] ASC));';
 
-    openDbAsync('HeatMeters.db').then(async db => {
+    openDbAsync().then(async db => {
       var result = await executeSqlAsync(db, createTable);
       console.log('Create table', result);
+      const emitter = new NativeEventEmitter();
+      emitter.emit('refreshData');
     });
   }, []);
 
@@ -87,7 +55,7 @@ const App = () => {
               backgroundColor: '#0080ff',
             },
           }}>
-          {/* <Stack.Screen name="InsertData" component={InsertMonthData} /> */}
+          <Stack.Screen name="InsertData" component={InsertMonthData} />
           <Stack.Screen name="Home" component={Home} />
         </Stack.Navigator>
       </NavigationContainer>

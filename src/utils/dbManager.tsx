@@ -59,8 +59,8 @@ export function enableDbPromise() {
   enablePromise(true);
 }
 
-export async function openDbAsync(dbName: string): Promise<SQLiteDatabase> {
-  return await openDatabase({name: 'prova.db', location: 'default'});
+export async function openDbAsync(): Promise<SQLiteDatabase> {
+  return await openDatabase({name: 'HeatMeters.db', location: 'default'});
 }
 
 export async function executeSqlAsync(
