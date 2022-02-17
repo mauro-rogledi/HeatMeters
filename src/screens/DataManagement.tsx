@@ -8,6 +8,7 @@ import {
   View,
 } from 'react-native';
 import {executeSqlAsync, openDbAsync} from '../utils/dbManager';
+import {globalStyles} from '../utils/globals';
 import {ListMonthData, MonthData, months} from '../utils/models';
 
 export default function DataManagement(props: any) {
@@ -22,7 +23,7 @@ export default function DataManagement(props: any) {
   }, []);
 
   return (
-    <View style={{flex: 1, marginTop: 40}}>
+    <View style={globalStyles.container}>
       <View>
         <FlatList
           numColumns={1}

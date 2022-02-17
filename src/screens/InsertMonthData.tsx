@@ -113,8 +113,10 @@ function LoadDataFromDB(
       currentMonth.month,
     ]);
 
-    let monthsData = result.map<string>((val, index) => val.Value.toString());
-    setValori(monthsData);
+    if (result) {
+      let monthsData = result.map<string>((val, index) => val.Value.toString());
+      setValori(monthsData);
+    }
   });
 }
 function SaveData(valori: string[], date: Date, isInsert: boolean): void {

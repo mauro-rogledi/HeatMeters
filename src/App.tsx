@@ -24,6 +24,7 @@ import {
 } from 'react-native';
 import Home from './screens/Home';
 import InsertMonthData from './screens/InsertMonthData';
+import {globalStyles} from './utils/globals';
 
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -43,7 +44,7 @@ const App = () => {
 
   const Stack = createNativeStackNavigator();
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={globalStyles.container}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
       <NavigationContainer>
         <Stack.Navigator
