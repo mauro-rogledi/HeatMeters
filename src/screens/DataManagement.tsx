@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import {executeSqlAsync, openDbAsync} from '../utils/dbManager';
 import {globalStyles} from '../utils/globals';
-import {ListMonthData, MonthData, months} from '../utils/models';
+import {ListMonthData, MonthData, months, queries} from '../utils/models';
 
 export default function DataManagement(props: any) {
   const [result, setResult] = useState<ListMonthData>();
@@ -57,8 +57,8 @@ function listItem(props: any, item: MonthData) {
         onPress={() => {
           props.navigation.navigate('InsertData', JSON.stringify(item));
         }}>
-        <Text>{`${months[item.month]} ${item.year}`} </Text>
-        <Text>{item.value}</Text>
+        <Text style={styles.text}>{`${months[item.month]} ${item.year}`} </Text>
+        <Text style={styles.text}>{item.value}</Text>
       </Pressable>
     </View>
   );
@@ -70,18 +70,18 @@ function LoadDataFromDB(
   console.log('LoadDataFromDB');
 
   openDbAsync().then(async db => {
-    var select =
-      'SELECT Year, Month, Day, SUM(Value) as Value FROM [MonthsData] GROUP BY Year, Month ORDER BY Year, Month';
-    var result = await executeSqlAsync(db, select);
-    let monthsData = result.map<MonthData>((val, index) => ({
-      month: val.Month,
-      year: val.Year,
-      value: val.Value,
-      day: val.Day,
-      room: 0,
-    }));
-    setResult(monthsData);
-    console.log('monthsData', monthsData);
+    var result = await executeSqlAsync(db, queries.SELECT);
+    if (result) {
+      let monthsData = result.map<MonthData>((val, index) => ({
+        month: val.Month,
+        year: val.Year,
+        value: val.Value,
+        day: val.Day,
+        room: 0,
+      }));
+      setResult(monthsData);
+      console.log('monthsData', monthsData);
+    }
   });
 }
 
@@ -89,19 +89,16 @@ const styles = StyleSheet.create({
   text: {
     color: '#ffffff',
     fontSize: 20,
-    margin: 10,
     textAlign: 'center',
   },
   button: {
-    height: 30,
+    height: 50,
     flexDirection: 'row',
-    backgroundColor: 'green',
     alignContent: 'center',
     borderRadius: 5,
     alignItems: 'center',
     paddingLeft: 10,
     paddingRight: 10,
-    margin: 1,
     justifyContent: 'space-between',
   },
   key: {

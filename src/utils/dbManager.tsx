@@ -70,6 +70,7 @@ export async function executeSqlAsync(
 ): Promise<any[]> {
   var rows: any;
   await db.transaction(tx => {
+    console.log('EXECUTE SQL', sqlCommand);
     tx.executeSql(sqlCommand, args, (tx, results) => {
       if (results.rows.length > 0) {
         rows = results.rows.raw();

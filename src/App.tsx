@@ -25,17 +25,17 @@ import {
 import Home from './screens/Home';
 import InsertMonthData from './screens/InsertMonthData';
 import {globalStyles} from './utils/globals';
+import {queries} from './utils/models';
 
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
 
+  console.log(queries.CREATE);
+
   useEffect(() => {
     enableDbPromise();
-    var createTable =
-      'CREATE TABLE IF NOT EXISTS [MonthsData]( [Year] SMALLINT, [Month] SMALLINT, [Day] SMALLINT, [Room] SMALLINT, [Value] SMALLINT, PRIMARY KEY([Year] ASC, [Month] ASC, [Room] ASC));';
-
     openDbAsync().then(async db => {
-      var result = await executeSqlAsync(db, createTable);
+      var result = await executeSqlAsync(db, queries.CREATE);
       console.log('Create table', result);
       const emitter = new NativeEventEmitter();
       emitter.emit('refreshData');

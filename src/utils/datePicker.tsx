@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import DateTimePicker from "@react-native-community/datetimepicker";
-import { View, Text, Pressable, StyleSheet } from "react-native";
+import React, {useState} from 'react';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import {View, Text, Pressable, StyleSheet} from 'react-native';
 
 export interface IDatePickerProps {
   currentDate: Date;
@@ -11,7 +11,7 @@ export function DatePicker(props: IDatePickerProps) {
   const [date, setDate] = useState(props.currentDate);
   const [show, setShow] = useState(false);
   return (
-    <View>
+    <View style={{alignItems: 'center'}}>
       <Pressable onPress={() => setShow(true)}>
         <Text style={styles.text}>{date.toLocaleDateString()}</Text>
       </Pressable>
@@ -35,5 +35,6 @@ export function DatePicker(props: IDatePickerProps) {
 const styles = StyleSheet.create({
   text: {
     fontSize: 20,
+    color: '#fff',
   },
 });

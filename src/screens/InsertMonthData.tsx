@@ -10,9 +10,12 @@ import {
   StatusBar,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {MonthData, months, rooms} from '../utils/models';
+import {MonthData, queries, rooms} from '../utils/models';
 import {DatePicker} from '../utils/datePicker';
 import {executeSqlAsync, openDbAsync} from '../utils/dbManager';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {CustomButton} from '../utils/CustomButton';
+import {globalStyles} from '../utils/globals';
 
 export default function InsertMonthData(props: any) {
   const [currentMonth, setCurrentMonth] = useState<MonthData>(
@@ -37,26 +40,29 @@ export default function InsertMonthData(props: any) {
   }, [props.route.params]);
 
   return (
-    <SafeAreaView style={{flex: 1, margin: 10}}>
+    <SafeAreaView style={globalStyles.container}>
       <StatusBar animated={true} />
-      <View style={{flex: 1}}>
+      <View style={[globalStyles.container, {margin: 10}]}>
         <DatePicker currentDate={curDate} onPress={e => setCurDate(e)} />
         {inputMonthData(valori, setValori)}
         <View
           style={{
+            flex: 1,
             flexDirection: 'row',
             justifyContent: 'space-evenly',
             zIndex: 0,
           }}>
-          <Button
+          <CustomButton
             title="Undo"
-            onPress={() => {
+            style={{backgroundColor: '#f00'}}
+            onPressButton={() => {
               props.navigation.navigate('Home');
             }}
           />
-          <Button
+          <CustomButton
             title="Save"
-            onPress={() => {
+            style={{backgroundColor: '#0f0'}}
+            onPressButton={() => {
               SaveData(valori, curDate, isInsert);
               props.navigation.navigate('Home', {update: true});
             }}
@@ -76,11 +82,12 @@ function inputMonthData(
       <View
         key={`{v${i}}`}
         style={{flexDirection: 'row', alignItems: 'center'}}>
-        <Text key={`t${i}`} style={{width: 150, fontSize: 18}}>
+        <Text key={`t${i}`} style={{width: 150, fontSize: 18, color: '#fff'}}>
           {v}
         </Text>
         <TextInput
           style={{
+            color: '#fff',
             fontSize: 18,
             marginLeft: 30,
             textAlign: 'right',
@@ -105,10 +112,7 @@ function LoadDataFromDB(
   currentMonth: MonthData,
 ) {
   openDbAsync().then(async db => {
-    var select =
-      'SELECT * FROM [MonthsData] WHERE Year = ? AND MONTH = ? ORDER by ROOM';
-
-    let result = await executeSqlAsync(db, select, [
+    let result = await executeSqlAsync(db, queries.SELECT_MONTH, [
       currentMonth.year,
       currentMonth.month,
     ]);
@@ -122,11 +126,8 @@ function LoadDataFromDB(
 function SaveData(valori: string[], date: Date, isInsert: boolean): void {
   openDbAsync().then(async db => {
     if (isInsert) {
-      var insert =
-        'INSERT INTO [MonthsData] (Year, Month, Day, Room, Value) VALUES(?,?,?,?,?)';
-
       valori.forEach(async (v: String, i: Number, a: string[]) => {
-        await executeSqlAsync(db, insert, [
+        await executeSqlAsync(db, queries.INSERT_MONTH, [
           date.getFullYear(),
           date.getMonth(),
           date.getDate(),
@@ -140,11 +141,9 @@ function SaveData(valori: string[], date: Date, isInsert: boolean): void {
         }
       });
     } else {
-      var update =
-        'UPDATE [MonthsData] SET Value = ? WHERE Year = ? AND Month = ? AND Room = ?';
-
       valori.forEach(async (v: String, i: Number, a: string[]) => {
-        await executeSqlAsync(db, update, [
+        console.log('UPDATE', queries.UPDATE_MONTH);
+        await executeSqlAsync(db, queries.UPDATE_MONTH, [
           +v,
           date.getFullYear(),
           date.getMonth(),
@@ -160,3 +159,22 @@ function SaveData(valori: string[], date: Date, isInsert: boolean): void {
     }
   });
 }
+
+const styles = StyleSheet.create({
+  safeareaview: {
+    color: '#ffffff',
+    fontSize: 20,
+    margin: 10,
+    textAlign: 'center',
+  },
+  button: {
+    width: 120,
+    height: 50,
+    alignItems: 'center',
+    borderRadius: 5,
+    margin: 10,
+  },
+  inputText: {
+    color: '#fff',
+  },
+});

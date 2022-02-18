@@ -1,7 +1,12 @@
-import {createDrawerNavigator, DrawerContent} from '@react-navigation/drawer';
+import {
+  createDrawerNavigator,
+  DrawerContent,
+  DrawerNavigationOptions,
+} from '@react-navigation/drawer';
 import React from 'react';
 import {StatusBar, StyleSheet, Text, View} from 'react-native';
 import {globalStyles} from '../utils/globals';
+import {DatabaseManager} from './DatabaseManager';
 import DataManagement from './DataManagement';
 
 export default function Home() {
@@ -33,27 +38,33 @@ export default function Home() {
         }}>
         <Drawer.Screen
           name="DataManagement"
-          options={{
-            title: 'Dati',
-            headerStyle: {
-              backgroundColor: '#0080ff',
-            },
-            headerTintColor: '#fff', //Set Header text color
-            headerTitleStyle: {
-              fontWeight: 'bold', //Set Header text style
-            },
-          }}
+          options={{...headerOptions, title: 'Inserimento'}}
           component={DataManagement}
         />
         <Drawer.Screen
           name="Stats"
-          options={{title: 'Statistiche'}}
+          options={{...headerOptions, title: 'Statistiche'}}
           component={ScreenB}
+        />
+        <Drawer.Screen
+          name="ImportExport"
+          options={{...headerOptions, title: 'Dati'}}
+          component={DatabaseManager}
         />
       </Drawer.Navigator>
     </View>
   );
 }
+
+const headerOptions: DrawerNavigationOptions = {
+  headerStyle: {
+    backgroundColor: '#0080ff',
+  },
+  headerTintColor: '#fff', //Set Header text color
+  headerTitleStyle: {
+    // fontWeight: 'bold', //Set Header text style
+  },
+};
 
 // const styles = StyleSheet.create({
 //   container: {
