@@ -22,17 +22,18 @@ export default function InsertMonthData(props: any) {
     props.route.params != null
       ? JSON.parse(props.route.params)
       : {
-          month: new Date().getMonth(),
-          year: new Date().getFullYear(),
-          day: new Date().getDate(),
-          value: 0,
+          Month: new Date().getMonth(),
+          Year: new Date().getFullYear(),
+          Day: new Date().getDate(),
+          Value: 0,
+          Room: 0,
         },
   );
 
   const [valori, setValori] = useState<string[]>([]);
   const [isInsert, setInsert] = useState(props.route.params == null);
   const [curDate, setCurDate] = useState<Date>(
-    () => new Date(currentMonth.year, currentMonth.month, currentMonth.day),
+    () => new Date(currentMonth.Year, currentMonth.Month, currentMonth.Day),
   );
 
   useEffect(() => {
@@ -113,8 +114,8 @@ function LoadDataFromDB(
 ) {
   openDbAsync().then(async db => {
     let result = await executeSqlAsync(db, queries.SELECT_MONTH, [
-      currentMonth.year,
-      currentMonth.month,
+      currentMonth.Year,
+      currentMonth.Month,
     ]);
 
     if (result) {

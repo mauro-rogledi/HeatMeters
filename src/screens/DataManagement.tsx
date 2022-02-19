@@ -29,7 +29,7 @@ export default function DataManagement(props: any) {
           numColumns={1}
           data={result}
           keyExtractor={(item, index) =>
-            item.year.toString() + item.month.toString()
+            item.Year.toString() + item.Month.toString()
           }
           renderItem={({item}) => {
             return listItem(props, item);
@@ -42,7 +42,7 @@ export default function DataManagement(props: any) {
           onPress={() => {
             props.navigation.navigate('InsertData');
           }}>
-          <Text>+</Text>
+          <Text style={{fontSize: 24, color: '#fff'}}>+</Text>
         </Pressable>
       </View>
     </View>
@@ -57,8 +57,8 @@ function listItem(props: any, item: MonthData) {
         onPress={() => {
           props.navigation.navigate('InsertData', JSON.stringify(item));
         }}>
-        <Text style={styles.text}>{`${months[item.month]} ${item.year}`} </Text>
-        <Text style={styles.text}>{item.value}</Text>
+        <Text style={styles.text}>{`${months[item.Month]} ${item.Year}`} </Text>
+        <Text style={styles.text}>{item.Value}</Text>
       </Pressable>
     </View>
   );
@@ -70,17 +70,12 @@ function LoadDataFromDB(
   console.log('LoadDataFromDB');
 
   openDbAsync().then(async db => {
-    var result = await executeSqlAsync(db, queries.SELECT);
-    if (result) {
-      let monthsData = result.map<MonthData>((val, index) => ({
-        month: val.Month,
-        year: val.Year,
-        value: val.Value,
-        day: val.Day,
-        room: 0,
-      }));
-      setResult(monthsData);
-      console.log('monthsData', monthsData);
+    var result = (await executeSqlAsync(db, queries.SELECT)) as ListMonthData;
+    console.log('eccomi', result);
+    if (result && result[0].Day) {
+      console.log('Rileggo');
+      setResult(result);
+      console.log('monthsData', result);
     }
   });
 }
@@ -113,7 +108,7 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: '#0f0',
+    backgroundColor: '#00F',
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 10,
