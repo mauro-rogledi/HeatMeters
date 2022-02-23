@@ -1,16 +1,17 @@
-// export interface MonthData {
-//   day: number;
-//   month: number;
-//   year: number;
-//   value: number;
-// }
-
 export interface MonthData {
-  Day: number;
-  Month: number;
+  Period: number;
+  Picked: Date;
   Year: number;
+  Month: number;
+  Day: number;
   Room: number;
   Value: number;
+}
+
+export interface Period {
+  Id: number;
+  Period: string;
+  OpenDate: string;
 }
 
 export interface ListMonthData extends Array<MonthData> {}
@@ -32,8 +33,10 @@ export let months: string[] = [
 ];
 
 export const queries: {[name: string]: string} = {
-  CREATE:
-    'CREATE TABLE IF NOT EXISTS [MonthsData]( [Year] SMALLINT, [Month] SMALLINT, [Day] SMALLINT, [Room] SMALLINT, [Value] SMALLINT, PRIMARY KEY([Year] ASC, [Month] ASC, [Room] ASC));',
+  CREATE_TABLE_PERIOD:
+    'CREATE TABLE IF NOT EXISTS [Period] ([Id] SMALLINT PRIMARY KEY NOT NULL, [Period] TEXT(32), [OpenDate] TEXT(10))',
+  CREATE_TABLE_MONTH:
+    'CREATE TABLE IF NOT EXISTS [MonthsData]([Period] [SMALLINT], [Picked] TEXT(10), [Year] SMALLINT, [Month] SMALLINT, [Room] SMALLINT, [Value] SMALLINT, PRIMARY KEY([Year] ASC, [Month] ASC, [Room] ASC));',
   SELECT:
     'SELECT Year, Month, Day, SUM(Value) as Value FROM [MonthsData] GROUP BY Year, Month ORDER BY Year, Month',
   SELECT_ALL: 'SELECT * FROM [MonthsData]',
@@ -44,4 +47,8 @@ export const queries: {[name: string]: string} = {
   UPDATE_MONTH:
     'UPDATE [MonthsData] SET Value = ? WHERE Year = ? AND Month = ? AND Room = ?',
   DELETE: 'DELETE FROM [MonthsData]',
+};
+
+export const colors: {[name: string]: string} = {
+  background: '#0080ff',
 };

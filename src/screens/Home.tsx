@@ -37,8 +37,13 @@ export default function Home() {
           drawerInactiveTintColor: '#aaa',
         }}>
         <Drawer.Screen
+          name="PeriodManagement"
+          options={{...headerOptions, title: 'Periodi'}}
+          component={DataManagement}
+        />
+        <Drawer.Screen
           name="DataManagement"
-          options={{...headerOptions, title: 'Inserimento'}}
+          options={{...headerOptions, title: 'Dati Mensili'}}
           component={DataManagement}
         />
         <Drawer.Screen

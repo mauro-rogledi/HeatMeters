@@ -11,7 +11,7 @@ import {
 import {CustomButton} from '../utils/CustomButton';
 import {globalStyles} from '../utils/globals';
 import * as RNFS from 'react-native-fs';
-import {executeSql, executeSqlAsync, openDbAsync} from '../utils/dbManager';
+import {executeSqlAsync, openDbAsync} from '../utils/dbManager';
 import {MonthData, queries} from '../utils/models';
 
 const filename: string = 'MonthsData.json';

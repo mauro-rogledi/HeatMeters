@@ -67,15 +67,10 @@ function listItem(props: any, item: MonthData) {
 function LoadDataFromDB(
   setResult: Dispatch<SetStateAction<ListMonthData | undefined>>,
 ) {
-  console.log('LoadDataFromDB');
-
   openDbAsync().then(async db => {
     var result = (await executeSqlAsync(db, queries.SELECT)) as ListMonthData;
-    console.log('eccomi', result);
     if (result && result[0].Day) {
-      console.log('Rileggo');
       setResult(result);
-      console.log('monthsData', result);
     }
   });
 }

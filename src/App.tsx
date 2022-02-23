@@ -25,20 +25,18 @@ import {
 import Home from './screens/Home';
 import InsertMonthData from './screens/InsertMonthData';
 import {globalStyles} from './utils/globals';
-import {queries} from './utils/models';
+import {colors, queries} from './utils/models';
 
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
 
-  console.log(queries.CREATE);
-
   useEffect(() => {
     enableDbPromise();
     openDbAsync().then(async db => {
-      var result = await executeSqlAsync(db, queries.CREATE);
-      console.log('Create table', result);
-      const emitter = new NativeEventEmitter();
-      emitter.emit('refreshData');
+      var result = await executeSqlAsync(db, queries.CREATE_TABLE_MONTH);
+      var result = await executeSqlAsync(db, queries.CREATE_TABLE_PERIOD);
+      // const emitter = new NativeEventEmitter();
+      // emitter.emit('refreshData');
     });
   }, []);
 
@@ -53,7 +51,7 @@ const App = () => {
             headerShown: false,
             headerTitleAlign: 'center',
             headerStyle: {
-              backgroundColor: '#0080ff',
+              backgroundColor: colors.background,
             },
           }}>
           <Stack.Screen name="InsertData" component={InsertMonthData} />
